@@ -1,1 +1,1 @@
-d
+list = list(map(int,list))
