@@ -6,11 +6,8 @@ for case in range(1,testcase + 1):
     for i in range(0,howbig):
         answer[0][i] = i + 1
         number = i +1
-    if howbig == 1:
-        print(f'#{case}')
-        print(1)
-        continue
-    cnt = 1 # 행인지 열인지
+
+    cnt = 1 # 짝수면ㄱ인지 홀수면 ㄴ인지
     cnt_odd = howbig - 1 # for문 두개 거칠때마다 작아짐
     cnt_even = 0 #for 문 하나 거칠때마다 커짐
     fix1 = 1
@@ -30,8 +27,6 @@ for case in range(1,testcase + 1):
             fix1 += 1
             if number == howbig * howbig:
                 break
-            else:
-                continue
 
         elif cnt % 2 == 0: # cnt가 짝수일때
             for row in range(fix2 + i,fix2-1,-1):
@@ -45,8 +40,7 @@ for case in range(1,testcase + 1):
             fix2 += 1
             if number == howbig * howbig:
                 break
-            else:
-                continue
+
     print(f'#{case}')
     for i in range(howbig):
         for j in range(howbig):
