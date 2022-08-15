@@ -1,9 +1,6 @@
 square_col, square_row = map(int,input().split())
-
-square = [[0]*(square_row+1) for _ in range(square_col + 1)]
 row_cut = [0]
 col_cut = [0]
-cut = 0
 ans = 0
 
 T = int(input())
