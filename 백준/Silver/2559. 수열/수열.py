@@ -1,6 +1,6 @@
 size, day = map(int,input().split())
 temperature = list(map(int,input().split()))
-max_sum = -102*size
+max_sum = -101*size
 temp = sum(temperature[0:day])
 
 
