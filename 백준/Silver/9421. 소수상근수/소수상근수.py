@@ -10,7 +10,9 @@ def len_for_number(num):
 numbers = [False, False] + [True] * (N - 1)
 
 ans = []
-for i1 in range(2,int(math.sqrt(N))):
+for i0 in range(2 * 2, N + 1, 2):
+    numbers[i0] = False
+for i1 in range(3,int(math.sqrt(N)),2):
     st = i1
     if numbers[st]==True:
         for i2 in range(st*2, N + 1, i1):
