@@ -1,5 +1,4 @@
 import sys
-import heapq
 import math
 
 def input():
@@ -22,6 +21,7 @@ if B >= A and B % A == 0:
                     if A*(divisor+C//divisor) < min_v:
                         ans = (A*divisor,C//divisor*A)
                         min_v = A*(divisor+C//divisor)
+                        divisor_set |= {divisor, C // divisor}
         else:
             break
 
