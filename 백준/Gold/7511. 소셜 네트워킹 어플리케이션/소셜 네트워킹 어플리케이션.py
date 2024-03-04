@@ -1,31 +1,51 @@
-
 import sys
-sys.setrecursionlimit(10**9)
-input = sys.stdin.readline
 
-def find(p, x):
-    if p[x] != x:
-        p[x] = find(p, p[x])
-    return p[x]
+def input():
+    return sys.stdin.readline().rstrip()
 
-def union(p, a, b):
-    a, b = find(p, a), find(p, b)
-    if a < b:
-        p[b] = a
+
+# 그래프 탐색말고도 구하는 방법....
+
+#유니온 파인드...?
+
+def find(x):
+    if parents[x] != x:
+        return find(parents[x])
+    return parents[x]
+
+
+def union(x,y):
+    x = find(x)
+    y = find(y)
+    if x < y:
+        parents[y] = x
     else:
-        p[a] = b
+        parents[x] = y
+T = int(input())
 
-for i in range(1, int(input())+1):
+for t in range(T):
+    print("Scenario " +str(t+1) + ":")
     n = int(input())
-    p = [i for i in range(n)]
     k = int(input())
+    parents = [x for x in range(n)]
+
     for _ in range(k):
-        a, b = map(int, input().split())
-        if find(p, a) != find(p, b):
-            union(p, a, b)
-    print('Scenario '+str(i)+':')
-    for _ in range(int(input())):
-        a, b = map(int, input().split())
-        if find(p, a) != find(p, b): print(0)
-        else: print(1)
-    print()
+        a, b = map(int,input().split())
+        union(a,b)
+
+    m = int(input())
+    for _ in range(m):
+        u, v = map(int,input().split())
+        if find(u) == find(v):
+            print(1)
+        else:
+            print(0)
+    if t < T - 1:
+        print()
+
+
+
+
+
+
+
