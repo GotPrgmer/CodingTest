@@ -1,47 +1,41 @@
 import sys
 from collections import deque
 
-input = sys.stdin.readline
+def input():
+    return sys.stdin.readline().rstrip()
 
-n = int(input())
-
-cur = ['A'] * n
-
-check = [
-    [False] * n
-    for _ in range(n)
-]
-
-ans = set()
-
-def dq():
-    q = deque([(0, n)])
-
-    # 계속해서 반으로 쪼개면서 서로 상대팀이 되도록 한다.
+def sol():
+    global ans
+    q = deque([(0, N)])
     while q:
         for _ in range(len(q)):
-            start, end = q.popleft()
+            s, e = q.popleft()
 
-            if end - start <= 1:
+            if e <= s + 1:
                 continue
+            mid = (s + e) // 2
 
-            mid = (start + end) // 2
+            #앞부분 변경
+            for fp in range(s,mid):
+                monkeys[fp] = 'A'
 
-            for i in range(start, mid):
-                cur[i] = 'A'
+            #뒷부분 변경
+            for bp in range(mid,e):
+                monkeys[bp] = 'B'
 
-            for i in range(mid, end):
-                cur[i] = 'B'
-            q.append((start, mid))
-            q.append((mid, end))
-
-        ans.add(''.join(cur))
-
-dq()
+            q.append((s,mid))
+            q.append((mid,e))
+        ans.add(''.join(monkeys))
 
 
-for a in ans:
-    print(a)
+N = int(input())
+
+monkeys = ['A']*N
+
+ans = set()
+sol()
+for ans_lst in ans:
+    print(''.join(ans_lst))
 
 for _ in range(7 - len(ans)):
-    print('A' + ('B' * (n - 1)))
+    print("A" + "B"*(N-1))
