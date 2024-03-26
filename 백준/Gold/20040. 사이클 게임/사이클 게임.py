@@ -1,17 +1,13 @@
 import sys
-input = sys.stdin.readline
 
-n, m = map(int, input().split())
-parents = [i for i in range(n)]
-endgame = 0
+def input():
+    return sys.stdin.readline().rstrip()
 
 def find(x):
-    if x == parents[x]:
-        return x
-    else:
-        y = find(parents[x])
-        parents[x] = y
-        return y
+    global parents
+    if x != parents[x]:
+        parents[x] = find(parents[x])
+    return parents[x]
 
 def union(x, y, indx):
     global endgame
@@ -21,9 +17,15 @@ def union(x, y, indx):
         parents[max(x,y)] = min(x,y)
     elif endgame == 0:
         endgame = indx
+n, m = map(int, input().split())
+parents = [i for i in range(n)]
+endgame = 0
 
 for i in range(m):
     a, b = map(int, input().split())
     union(a, b, i + 1)
-
-print(endgame)
+    if endgame != 0:
+        print(endgame)
+        break
+if endgame == 0:
+    print(endgame)
