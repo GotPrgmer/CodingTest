@@ -1,18 +1,19 @@
 import sys
-input = sys.stdin.readline
 
-n = int(input())
+def input():
+    return sys.stdin.readline().rstrip()
 
-d = [1]*(n+1)
-num = [0]
-for i in range(n):
-    num.append(int(input()))
+def sol():
+    #1부터 시작해서 최장 증가하는 수열을 구하자.
+    dp = [1]*(N+1)
+    for s_idx in range(1,N+1):
+        for mv_idx in range(1,s_idx+1):
+            if num_lst[mv_idx] < num_lst[s_idx]:
+                dp[s_idx] = max(dp[mv_idx]+1,dp[s_idx])
+    return N - max(dp)
 
-#가장 긴 증가하는 수열 찾기 
-for i in range(1,n+1):
-    for j in range(1,i):
-        if num[j]<num[i]:
-            d[i]=max(d[i],d[j]+1)
-
-#n- 긴 증가하는 부분수열의 길이 
-print(n-max(d))
+N = int(input())
+num_lst = [1]
+for _ in range(N):
+    num_lst.append(int(input()))
+print(sol())
