@@ -1,28 +1,31 @@
 import sys
 
-#입력
-N, M, X = map(int, input().split())
-distance = [[M * 100 for _ in range(N+1)] for _ in range(N+1)]
+def input():
+    return sys.stdin.readline().rstrip()
+
+
+def sol():
+    #플로이드 와샬
+    #초기화
+
+    for mid in range(1,N+1):
+        for start in range(1,N+1):
+            if dp[start][mid] != M*100:
+                for end in range(1,N+1):
+                    if start == end:
+                        dp[start][end] = 0
+                    else:
+                        dp[start][end] = min(dp[start][end],
+                                             dp[start][mid]+dp[mid][end])
+    return dp
+N, M, X = map(int,input().split())
+dp = [[M*100] * (N + 1) for _ in range(N + 1)]
 for _ in range(M):
-    start, end, time = map(int, sys.stdin.readline().split())
-    distance[start][end] = time
+    s, e, T = map(int,input().split())
+    dp[s][e] = T
 
-
-#플로이드 와샬 알고리즘
-for k in range(1, N+1): #경로 for문이 가장 상위 단계여야 누락되지 않는다
-    for i in range(1, N+1):
-        if distance[i][k] != M * 100:
-            for j in range(1, N+1):
-                if i == j: #자기 자신일 경우
-                    distance[i][j] = 0 
-                else:
-                    distance[i][j] = min(distance[i][j],
-                                         distance[i][k] + distance[k][j])
-
-
-#출력
-max_time = 0
-for i in range(1, N+1):
-    max_time = max(max_time,
-                   distance[i][X] + distance[X][i])
-print(max_time)
+dp = sol()
+ans = 0
+for i in range(1,N+1):
+    ans = max(ans,dp[i][X]+dp[X][i])
+print(ans)
