@@ -12,19 +12,18 @@ def union(x,y):
     x = find_parent(x)
     y = find_parent(y)
 
-    if x < y:
+    if rank[x] > rank[y]:
         parents[y] = x
     else:
         parents[x] = y
-
+        if rank[x] == rank[y]:
+            rank[x] += 1
 
 
 def sol():
     global ans
-    visited = set()
     cnt = 0
-    while q:
-        cost, s, e = heapq.heappop(q)
+    for cost, s, e in q:
         #들어가도 되는지
         s_num = s[0]*C + s[1]
         e_num = e[0]*C + e[1]
@@ -41,6 +40,7 @@ T = int(input())
 for _ in range(T):
     R, C = map(int,input().split())
     parents = [i for i in range(R*C)]
+    rank = [1 for i in range(R*C)]
     ans = 0
 
     #가로 비용
@@ -49,13 +49,15 @@ for _ in range(T):
         horizon_cost = list(map(int,input().split()))
         #엣지 추가하기
         for c in range(len(horizon_cost)):
-            heapq.heappush(q,(horizon_cost[c],(r,c),(r,c+1)))
+            q.append((horizon_cost[c],(r,c),(r,c+1)))
     #세로 비용
     for r in range(R-1):
         vertical_cost = list(map(int,input().split()))
         #엣지 추가하기
         for c in range(len(vertical_cost)):
-            heapq.heappush(q,(vertical_cost[c],(r,c),(r+1,c)))
+            q.append((vertical_cost[c],(r,c),(r+1,c)))
+    
+    q.sort()
 
 
     print(sol())
