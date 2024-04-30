@@ -1,29 +1,38 @@
-def solution(n_gold, n_silver, golds, silvers, weights, times):
-    def deliver(time_limit):
-        gold = silver = total = 0
-        for i in range(len(golds)):
-            # 편도 횟수
-            one_way = time_limit // times[i]
-            # 배달 횟수 = 왕복당 1회 + 1이 남으면 1 추가
-            deliver_num = one_way // 2 + one_way % 2
-            # 총 배송 가능 무게
-            weight = deliver_num * weights[i]
-            # 금만 보냈을 때 배송 가능한 금
-            gold += min(golds[i], weight)
-            # 은만 보냈을 때 배송 가능한 은
-            silver += min(silvers[i], weight)
-            # 배송 가능한 금과 은 모두!
-            total += min(golds[i] + silvers[i], weight)
-            # 금, 은, 모두가 배송 가능하면 True
-        return gold >= n_gold and silver >= n_silver and total >= n_gold + n_silver
-
-    end = answer = 10 ** 15
+def solution(a, b, g, s, w, t):
+    max_time = 4*(10**14)
+    ans = max_time
     start = 0
+    end = max_time
     while start <= end:
-        mid = (start + end) // 2
-        if deliver(mid):
+        #고른 시간
+        mid = (start+end)//2
+        #각 트럭이 고른 시간안에 이동해서 최대한으로 옮길수있는 광석 계산
+        #얼마나 이동할 수 있는가?
+        total_g = 0
+        total_s = 0
+        total_carry = 0
+        
+        for i in range(len(t)):
+            #현재의 값들
+            now_g = g[i]
+            now_s = s[i]
+            now_w = w[i]
+            now_t = t[i]
+            #현재 트럭은 얼마나 이동할 수 있는가?
+            max_cnt = mid//(now_t*2)
+            if mid%(now_t*2) >= now_t:
+                max_cnt += 1
+            total_g += min(now_g,max_cnt*now_w)
+            total_s += min(now_s,max_cnt*now_w)
+            total_carry += min(total_g+total_s,max_cnt*now_w)
+        if total_g >= a and total_s >= b and total_carry >= a+b:
+            #현재 시간으로 옮기기 가능!
+            #시간을 더 줄여보자
             end = mid - 1
-            answer = mid
+            ans = min(ans,mid)
         else:
-            start = mid + 1
-    return answer
+            #시간을 더 늘려보자
+            start= mid + 1
+            
+            
+    return ans
