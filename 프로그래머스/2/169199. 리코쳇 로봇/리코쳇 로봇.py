@@ -29,6 +29,10 @@ def bfs(r,c):
         start_r, start_c, cnt = q.popleft()
         if map_info[start_r][start_c] == 'G':
             return cnt
+        if (start_r,start_c) in visited:
+            continue
+        visited.add((start_r,start_c))
+
         for d in range(4):
             r = start_r
             c = start_c
@@ -42,8 +46,6 @@ def bfs(r,c):
                 else:
                     break
         #r, c를 q에 넣고 visited방문확인하고 q에 넣기
-            if (r,c) not in visited:
-                visited.add((r,c))
-                q.append((r,c,cnt+1))
+            q.append((r,c,cnt+1))
     return -1
     
