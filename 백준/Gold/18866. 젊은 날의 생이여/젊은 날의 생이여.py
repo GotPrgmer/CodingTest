@@ -1,80 +1,55 @@
 import sys
 
-input = sys.stdin.read
-data = input().strip().split()
-index = 0
+def input():
+    return sys.stdin.readline().rstrip()
 
-def getInt():
-    global index
-    value = int(data[index])
-    index += 1
-    return value
+max_happy = 0
+min_happy = float('INF')
 
-def getIntList():
-    global index
-    values = list(map(int, data[index:index+2]))
-    index += 2
-    return values
+max_tired = 0
+min_tired = float('INF')
 
-INF = 1000000005
-L = 1000005
+N = int(input())
 
-class Day:
-    def __init__(self):
-        self.happy = 0
-        self.sleepy = 0
+both = []
+for i in range(N):
+    h, t = map(int,input().split())
+    both.append([h,t])
 
-days = [Day() for _ in range(L)]
-youth = [Day() for _ in range(L)]
-old = [Day() for _ in range(L)]
+youth = [[0,0] for _ in range(N)]
+old = [[0,0] for _ in range(N)]
+#젊은 날들을 보면서 행복의 최소값과 피로도의 최댓값 갱신
+#젊은 날의 행복의 최소값이 늙은 날의 행복의 최대값보다 커야하고
+#젊은 날의 피로 최대값이 늙은 날의 피로의 최소값보다 작아야한다.
+#이게 안맞는 부분직전까지가 최대의 젊은 날임
 
-def cmp(a, b):
-    if a < b:
-        return b
-    else:
-        return a
+#젊은 날
+for i in range(len(both)):
+    if both[i][0] != 0:
+        min_happy = min(min_happy,both[i][0])
+    if both[i][1] != 0:
+        max_tired = max(max_tired,both[i][1])
+    youth[i][0] = min_happy
+    youth[i][1] = max_tired
 
-def main():
-    global index
-    maxHappy = -1
-    minHappy = INF
-    maxSleepy = -1
-    minSleepy = INF
+#늙은 날
+for i in range(len(both)-1,-1,-1):
+    if both[i][0] != 0:
+        max_happy = max(max_happy,both[i][0])
 
-    N = getInt()
-    
-    for i in range(1, N + 1):
-        days[i].happy, days[i].sleepy = getIntList()
+    if both[i][1] != 0:
+        min_tired = min(min_tired,both[i][1])
 
-    # youth
-    for i in range(1, N + 1):
-        if days[i].happy != 0 and days[i].happy < minHappy:
-            minHappy = days[i].happy
-        if days[i].sleepy != 0 and days[i].sleepy > maxSleepy:
-            maxSleepy = days[i].sleepy
-        youth[i].happy = minHappy
-        youth[i].sleepy = maxSleepy
+    old[i][0] = max_happy
+    old[i][1] = min_tired
 
-    # old
-    for i in range(N, 0, -1):
-        if days[i].happy != 0 and days[i].happy > maxHappy:
-            maxHappy = days[i].happy
-        if days[i].sleepy != 0 and days[i].sleepy < minSleepy:
-            minSleepy = days[i].sleepy
-        old[i].happy = maxHappy
-        old[i].sleepy = minSleepy
+#비교
+ans = 0
+for i in range(N-1):
+    #젊 행 소 > 늙 행 대 and 젊 피 대 < 늙 피 소
+    if youth[i][0] > old[i+1][0] and youth[i][1] < old[i+1][1]:
+        ans =i + 1
+if ans == 0:
+    ans = -1
 
-    # 판별 시작
-    count = -1
-    for k in range(N - 1, 0, -1):  # K는 젊은 날
-        youth_happy = youth[k].happy
-        youth_sleepy = youth[k].sleepy
-        old_happy = old[k + 1].happy
-        old_sleepy = old[k + 1].sleepy
-        if youth_happy > old_happy and youth_sleepy < old_sleepy:
-            count = cmp(count, k)
-
-    print(count)
-
-if __name__ == "__main__":
-    main()
+print(ans)
