@@ -22,24 +22,29 @@ for i in range(N):
 min_lst.sort()
 max_lst.sort()
 for i in range(N):
-    s = 0
+    s = -1
     e = N
-    while s<e:
+    while s+1<e:
         m = (s+e)//2
-        if max_lst[m] >= original_min_lst[i]:
-            e = m
+        if max_lst[m] < original_min_lst[i]:
+            s = m
+        #값이 같거나 클때 T
+        #T가 시작되는 위치를 찾아야함!
+        #그런데 그 위치가 0이 될수도 있으니 나온 값에서 +1을 해준다.
         else:
-            s = m + 1
-    ans1 = e + 1
-
-    s = 0
+            e = m
+    ans1 = e
+    s = -1
     e = N
-    while s<e:
+    while s+1<e:
         m = (s+e)//2
         if min_lst[m] <= original_max_lst[i]:
-            s = m+1
+            s = m
+        #값이 클때가 F이므로
+        #F가 시작되는 위치를 찾아야함!
+        #구조상 0번째가 될수없기에 위와같이 +1을 해주지는 않는다.
         else:
             e = m
     ans2 = e
-    print(ans1, ans2)
+    print(ans1+1, ans2)
 
