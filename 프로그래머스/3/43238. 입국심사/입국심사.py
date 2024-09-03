@@ -1,6 +1,6 @@
 def solution(n, times):
     s = 0
-    e = 1000000000**2
+    e = 1000000000*n
     while s+1<e:
         m = (s+e)//2
         total = 0
