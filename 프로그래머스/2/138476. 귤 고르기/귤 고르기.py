@@ -1,17 +1,7 @@
-from collections import defaultdict
+from itertools import combinations
 def solution(k, tangerine):
-    t_cnt = defaultdict(int)
-    for t in tangerine:
-        t_cnt[t] += 1
-    tangerine_set = set(tangerine)
-    t_sort = []
-    for t in tangerine_set:
-        t_sort.append([t_cnt[t],t])
-    t_sort.sort(reverse=True)
-    ans = 0
-    cnt = 0
-    for t in t_sort:
-        cnt += t[0]
-        ans += 1
-        if cnt >=k:
-            return ans
+    comb = combinations(tangerine,k)
+    ans = k
+    for c in comb:
+        ans = min(ans,len(set(c)))
+    return ans
