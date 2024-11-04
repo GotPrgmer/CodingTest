@@ -3,17 +3,18 @@ import sys
 def input():
     return sys.stdin.readline().rstrip()
 
-code_input = list(map(int,input()))
-dp = [0]*(len(code_input)+1)
-if code_input[0] == 0:
-    print("0")
+n = list(map(int,input()))
+l = len(n)
+dp = [0]*(l+1)
+if n[0] == 0:
+    print('0')
 else:
-    code_input = [0] + code_input
-    dp[0] = dp[1] = 1
-    for idx in range(2,len(code_input)):
-        if code_input[idx]>0:
-            dp[idx] += dp[idx-1]
-
-        if 10 <= code_input[idx - 1]*10 + code_input[idx] <= 26:
-                dp[idx] += dp[idx - 2]
-    print(dp[len(code_input)-1]%1000000)
+    n = [0]+n
+    dp[0]=dp[1]=1
+    for i in range(2,l+1):
+        if n[i] >0:
+            dp[i] += dp[i-1]
+        tmp = n[i-1]*10 + n[i]
+        if tmp >= 10 and tmp <= 26:
+            dp[i] += dp[i-2]
+    print(dp[l]%1000000)
