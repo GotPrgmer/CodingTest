@@ -15,6 +15,6 @@ else:
         if n[i] >0:
             dp[i] += dp[i-1]
         tmp = n[i-1]*10 + n[i]
-        if tmp >= 10 and tmp <= 26:
+        if 10 <= tmp <= 26:
             dp[i] += dp[i-2]
     print(dp[l]%1000000)
