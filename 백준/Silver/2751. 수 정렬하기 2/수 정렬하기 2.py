@@ -1,12 +1,12 @@
 import sys
 
-input= sys.stdin.readline
-N= int(input())
-arr=[]
-for i in range(N):
-    e=int(input())
-    arr.append(e)
-arr=sorted(arr)
+def input():
+    return sys.stdin.readline().rstrip()
 
-for i in arr:
+N = int(input())
+nums = []
+for _ in range(N):
+    nums.append(int(input()))
+nums.sort()
+for i in nums:
     print(i)
