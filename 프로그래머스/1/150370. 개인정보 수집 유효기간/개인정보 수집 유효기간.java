@@ -2,28 +2,19 @@ import java.util.*;
 class Solution {
     public int[] solution(String today, String[] terms, String[] privacies) {
         Map<String,Integer> map = new HashMap<>();
-        Map<String,Integer> mapIdx = new HashMap<>();
-        Set<String> excludeInfo = new HashSet<>();
         List<Integer> ans = new ArrayList<>();
         for(int infoIdx=0;infoIdx<terms.length;infoIdx++){
             String info = terms[infoIdx];
             String[] tmp = info.split(" ");
             int duration = Integer.valueOf(tmp[1]);
             map.put(tmp[0],duration);
-            mapIdx.put(tmp[0],infoIdx);
             System.out.println(info);
         }
-        System.out.println(today);
         String[] todaySep = today.split("\\.");
-        System.out.println(Arrays.toString(todaySep));
         int totalCurDate = calTotalDays(today);
         for(int pIdx=0;pIdx<privacies.length;pIdx++){
             String p = privacies[pIdx];
             String[] dateAndP = p.split(" ");
-            //이미 제외한 달 스킵!
-            // if(excludeInfo.contains(dateAndP[1])){
-            //     continue;
-            // }
             //전체 일수 계산
             int plusDuration = map.getOrDefault(dateAndP[1],-1);
             if(plusDuration == -1){
@@ -36,7 +27,6 @@ class Solution {
             int remainTotalDate = totalCurDate - totalPrivacy;
             if(remainTotalDate>=0){
                 ans.add(pIdx+1);
-                excludeInfo.add(dateAndP[1]);
             }
                                 }
         Collections.sort(ans);
