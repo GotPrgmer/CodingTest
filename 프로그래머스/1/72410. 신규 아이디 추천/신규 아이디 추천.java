@@ -6,14 +6,9 @@ class Solution {
         String twoStr = two(oneStr);
         String threeStr = three(twoStr);
         String fourStr = four(threeStr);
-        System.out.println("4 "+four(threeStr));
-
         String fiveStr = five(fourStr);
-        System.out.println("5 " +five(fourStr));
         String sixStr = six(fiveStr);
-        System.out.println(six(fiveStr));
         String sevenStr = seven(sixStr);
-        System.out.println(seven(sixStr));
         
         return sevenStr;
     }
@@ -30,7 +25,6 @@ class Solution {
             }
         }
     
-   System.out.println(sb.toString());
    return sb.toString();
    }
     
@@ -43,7 +37,6 @@ class Solution {
             }
 
         }
-       System.out.println(sb.toString());
 
            return sb.toString();
     }
@@ -52,7 +45,7 @@ class Solution {
     private String three(String new_id){
             while(new_id.contains("..")){
                 new_id = new_id.replace("..",".");
-            }System.out.println(new_id);
+            }
            return new_id;
     }
     
