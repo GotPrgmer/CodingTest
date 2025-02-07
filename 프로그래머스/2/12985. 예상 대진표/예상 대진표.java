@@ -1,13 +1,12 @@
 class Solution
 {
     public int solution(int n, int a, int b)
-    {   int cnt = 0;
-        while(a!=b){
-            a = a/2+a%2;
-            b = b/2+b%2;
-            cnt += 1;
-        }
+    {
+        int answer = 0;
 
-        return cnt;
+        // [실행] 버튼을 누르면 출력 값을 볼 수 있습니다.
+        System.out.println("Hello Java");
+
+        return answer;
     }
 }
