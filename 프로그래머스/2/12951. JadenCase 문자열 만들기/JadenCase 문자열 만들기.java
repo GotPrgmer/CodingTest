@@ -1,42 +1,39 @@
-import java.util.*;
 class Solution {
     public String solution(String s) {
-        s = ". "+s+" .";
+        //공백 기준으로 나누기
+        String[] input = s.split(" ",-1);
         StringBuilder sb = new StringBuilder();
-        String[] sList = s.split(" ");
-        if(sList.length==0){
-            return s;
-        }
-        else{
-        System.out.println(Arrays.toString(sList));
-        for(int i=1;i<sList.length-1;i++){
-            if(sList[i].equals("")){
-                sb.append("");
+        for(int i=0;i<input.length;i++){
+            if(i==input.length-1){
+                sb.append(process(input[i]));
             }
             else{
-                sb.append(process(sList[i]));
+                sb.append(process(input[i])+" ");
             }
-            
-            if(i!=sList.length-2){
-                sb.append(" ");
-            }
+            //공백이면 그대로 넣기
+            //단어끼리 하나로 모으기
         }
         return sb.toString();
-        }
-    }
-    public String process(String s){
-        StringBuilder sb = new StringBuilder();
-        if(!Character.isDigit(s.charAt(0))){
-                sb.append(String.valueOf(s.charAt(0)).toUpperCase());
-            }
-        else{
-                sb.append(String.valueOf(s.charAt(0)).toUpperCase());
-
-        }
-        for(int i=1;i<s.length();i++){
-            sb.append(String.valueOf(s.charAt(i)).toLowerCase());
-        }
-        return sb.toString();
-    }
     
+    }
+    //첫머리 알파벳이면 대문자로 바꾸고 나머지 전부 소문자
+    public String process(String parseString){
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<parseString.length();i++){
+            if(!Character.isDigit(parseString.charAt(i))){
+                //두문자면 대문자로
+                if(i==0){
+                    sb.append(Character.toUpperCase(parseString.charAt(i)));
+                }
+                else{
+                    sb.append(Character.toLowerCase(parseString.charAt(i)));
+                }
+            }
+            else{
+                sb.append(parseString.charAt(i));
+            }
+        }
+        return sb.toString();
+    }
+               
 }
