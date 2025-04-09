@@ -1,13 +1,27 @@
 class Solution {
     public int solution(int n) {
         int answer = 0;
-        int bitCnt = Integer.bitCount(n);
+        int obj = process(n);
+        int num = n+1;
         while(true){
-            n += 1;
-            if(bitCnt==Integer.bitCount(n)){
-                return n;
+            if(obj == process(num)){
+                answer = num;
+                break;
             }
+            num += 1;
+                
         }
+        return answer;
     }
     
+    public int process(int num){
+        String b = Integer.toString(num,2);
+        int cnt = 0;
+        for(int i=0;i<b.length();i++){
+            if(b.charAt(i)=='1'){
+                cnt += 1;
+            }
+        }
+        return cnt;
+    }
 }
