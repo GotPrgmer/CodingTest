@@ -1,23 +1,21 @@
+import java.util.*;
 class Solution {
     public int[] solution(int n, long left, long right) {
-        long cur_r = left/n;
-        long cur_c = left%n;
-        long goal_r = right/n;
-        long goal_c = right%n;
-        int[] answer = new int[(int)(right-left+1)];
-        int cnt = 0;
-        while(cnt != right-left+1){
-            answer[cnt] = (int)(Math.max(cur_r,cur_c)+1);
-            cnt += 1;
-            if(cur_c==n-1){
-                cur_r += 1;
-                cur_c = 0;
+        int[] nums = new int[(int)(right-left)+1];
+        for(long i=left;i<right+1;i++){
+            long cycle = i/n+1;
+            long cnt = i%n+1;
+            if(cnt > cycle){
+                long value = cnt;
+                nums[(int)(i-left)] = (int)value;
             }
             else{
-                cur_c += 1;
+                long value = cycle;
+                nums[(int)(i-left)] = (int)value;
             }
             
         }
-        return answer;
+
+        return nums;
     }
 }
