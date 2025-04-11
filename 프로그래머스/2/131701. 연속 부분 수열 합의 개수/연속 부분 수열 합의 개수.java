@@ -1,30 +1,25 @@
 import java.util.*;
-import java.util.stream.*;
 class Solution {
     public int solution(int[] elements) {
-        Set<Integer> set = new HashSet<>();
-        List<Integer> initElements = Arrays.stream(elements).boxed().collect(Collectors.toList());
-        //리스트 이어붙이기
-        List<Integer> list = new ArrayList<>();
-        list.addAll(initElements);
-        list.addAll(initElements);
-        list.addAll(initElements);
-        //누적합 구하기
-        for(int i =1;i<list.size();i++){
-            list.set(i,list.get(i-1)+list.get(i));
-        }
-        //정답구하기
-        for(int i =1;i<initElements.size()+1;i++){
-            for(int j =i-1;j<initElements.size()+i;j++){
-                if(j-i<0){
-                    set.add(list.get(j));
+        Set<Integer> visited = new HashSet<>();
+        for(int l=1;l<elements.length+1;l++){
+            for(int i=0;i<elements.length;i++){
+                int cnt = 1;
+                int cur_idx = i;
+                int cur = elements[i];
+                while(cnt < l){
+                    cur_idx += 1;
+                    if(cur_idx == elements.length){
+                        cur_idx = 0;
+                    }
+                    cnt += 1;
+                    cur += elements[cur_idx];
                 }
-                else{
-                    set.add(list.get(j)-list.get(j-i));
-                }
+                visited.add(cur);
+                
             }
         }
-        int answer = 0;
-        return set.size();
+        // System.out.println(visited);
+        return visited.size();
     }
 }
