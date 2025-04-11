@@ -1,10 +1,10 @@
 import java.util.*;
 class Solution {
-    public int solution(int[] arr) {
+    public long solution(int[] arr) {
         Set<Integer> nums = new HashSet<>();
         nums.add(arr[0]);
-        int cur = arr[0];
-        int gcd = 1;
+        long cur = arr[0];
+        long gcd = 1;
         for(int i=1;i<arr.length;i++){
             if(!nums.contains(arr[i])){
                 gcd = gcd(cur,arr[i]);
@@ -18,11 +18,11 @@ class Solution {
 
         return cur;
     }
-    public int gcd(int a, int b){
-        int big = Math.max(a,b);
-        int small = Math.min(a,b);
+    public long gcd(long a, long b){
+        long big = Math.max(a,b);
+        long small = Math.min(a,b);
         while(true){
-            int r = big%small;
+            long r = big%small;
             
             if(r==0){
                 break;
