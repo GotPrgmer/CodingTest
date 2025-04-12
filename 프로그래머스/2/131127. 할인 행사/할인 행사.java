@@ -17,7 +17,7 @@ class Solution {
         if(isAnswer(number)){
             ans += 1;
         }
-        //for문에서 정답이 나올경우
+        //for문에서 정답 카운트 누적
         
         for(int i=10;i<discount.length;i++){
             oper(discount[i],true);
@@ -27,11 +27,11 @@ class Solution {
             }
         }
 
-        //for문에서 정답이 나오지 않을 경우
+        //정답 반환
         return ans;
 
     }
-    
+    //map에 들어가있는 Item 넣거나 빼기
     public void oper(String item,boolean isAdd){
         //item에 맞는 인덱스 가져오기
         int itmIdx = mapping.getOrDefault(item,-1);
@@ -46,6 +46,7 @@ class Solution {
         }
         return;
     }
+    //현재 정답이 맞는지 확인
     public boolean isAnswer(int[] number){
         for(int i=0;i<number.length;i++){
             if(number[i] != cnt[i]){
