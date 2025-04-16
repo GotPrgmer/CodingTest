@@ -1,25 +1,21 @@
 import java.util.*;
 class Solution {
+    static Set<Set<String>> coms;
+    static Set<String> tmp;
+    static Map<String,Integer> kindCnt;
     public int solution(String[][] clothes) {
-        Map<String,Set<String>> map = new HashMap<>();
-        for (String[] clothSet:clothes){
-                String key = clothSet[clothSet.length - 1];
-
-                Set<String> newSet = Set.of(Arrays.copyOfRange(clothSet, 0, clothSet.length - 1));
-
-                Set<String> existingSet = map.getOrDefault(key, new HashSet<>());
-
-                // 기존 Set에 새로운 값 추가
-                existingSet.addAll(newSet);
-            map.put(key,existingSet);
+        kindCnt = new HashMap<>();
+        coms = new HashSet<>();
+        tmp = new HashSet<>();
+        //종류 카운트 증가
+        for(int i=0;i<clothes.length;i++){
+            kindCnt.put(clothes[i][1],kindCnt.getOrDefault(clothes[i][1],0)+1);
         }
-        int combClothes = 1;
-        for(Set<String> clothe: map.values()){
-
-            combClothes *= (clothe.size()+1);
+        int ans = 1;
+        int kindsCnt = kindCnt.keySet().size();
+        for(String s:kindCnt.keySet()){
+            ans *= (kindCnt.get(s)+1);
         }
-
-
-        return combClothes-1;
+        return ans-1;
     }
 }
