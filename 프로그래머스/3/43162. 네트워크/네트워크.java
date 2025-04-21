@@ -7,36 +7,38 @@ class Solution {
             parents[i] = i;
         }
         for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
+            for(int j=i+1;j<n;j++){
                 if(computers[i][j] == 1){
                     union(i+1,j+1);
                 }
             }
         }
+        for(int i=1;i<n+1;i++){
+            find(i);
+        }
+        Set<Integer> points = new HashSet<>();
+        for(int i=1;i<n+1;i++){
+                points.add(parents[i]);
+        }
         System.out.println(Arrays.toString(parents));
-        Set<Integer> result = new HashSet<>();
-        for(int i=1;i<parents.length;i++){
-            result.add(find(i));
-        }
-        return result.size();
+        int answer = 0;
+        return points.size();
     }
+    
     public int find(int x){
-        if(parents[x]==x) return x;
-        else{
-            return parents[x] = find(parents[x]);
+        if(x != parents[x]){
+            parents[x] = find(parents[x]);
         }
-        
+        return parents[x];
     }
     public void union(int x, int y){
-        int parentX = find(x);
-        int parentY = find(y);
-        if(parentX==parentY) return;
-          if(parentX<=parentY){
-            parents[parentY] = parentX;
+        int x_parent = find(x);
+        int y_parent = find(y);
+        if(x_parent<y_parent){
+            parents[y_parent] = x_parent;
         }
         else{
-            parents[parentX] = parentY;
-        }  
-
+            parents[x_parent] = y_parent;
+        }
     }
 }
