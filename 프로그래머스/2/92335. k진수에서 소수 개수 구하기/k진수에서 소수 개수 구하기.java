@@ -1,37 +1,32 @@
 import java.util.*;
-import java.util.stream.*;
 class Solution {
-    static boolean[] check;
     public int solution(int n, int k) {
-        int answer = 0;
-        String numToK = Integer.toString(n,k);
-        String[] numsString = numToK.split("0");
-
-        for(int i=0;i<numsString.length;i++){
-            if(numsString[i].length() ==0){
-                continue;
-            }
-            long num = Long.parseLong(numsString[i]);
-            if(checkPrime(num) == true){
-                answer += 1;
+        String[] s = Integer.toString(n,k).split("0");
+        int cnt = 0;
+        for(int i=0;i<s.length;i++){
+            if(s[i].length()>0){
+                if(isPrime(Long.parseLong(s[i]))){
+                    cnt++;
+                }
             }
         }
-        return answer;
+        System.out.println(isPrime(111));
+        System.out.println(Arrays.toString(s));
+        return cnt;
     }
-    
-    
-        private boolean checkPrime(long num){
-        
-        if(num <=1){
-            return false;
-        }
-        else{
-            for(int i=2; i<=Math.sqrt(num);i++){
-                if(num%i==0) return false;
-            }
+    public boolean isPrime(long m){
+        if(m==2){
             return true;
         }
+        if(m==1){
+            return false;
+        }
+        for(long i=2;i<Math.sqrt(m)+1;i++){
+            if(m%i==0){
+                System.out.println(i);
+                return false;
+            }
+        }
+        return true;
     }
-    
-    
 }
