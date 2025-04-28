@@ -1,78 +1,70 @@
 import java.util.*;
 class Solution {
-    static int lastClock = 23*60+59;
     public int[] solution(int[] fees, String[] records) {
-        //입차 및 출차 정보 map
-        Map<String,Integer> inAndOut = new HashMap<>();
-        //분 합계
-        Map<String, Integer> minuteTotal = new HashMap<>();
-        
-        //records에서 하나씩 빼면서 입차때는 맵에 기록하고
-        //출차때는 입차에서의 기록에서 빼서 분을 분 합계에 기록하고
-        // 입출차 정보에서 해당 번호를 지운다.
-        for(int i=0;i<records.length;i++){
-            String[] input = records[i].split(" ");
-            String time = input[0];
-            String num = input[1];
-            String parkOrNot = input[2];
-            // System.out.println(time+" "+num+" "+parkOrNot);
-            
-            int hourToMin = Integer.parseInt(time.substring(0,2))*60;
-            int minute = Integer.parseInt(time.substring(3,5));
-            int totalMin = hourToMin + minute;
-            // System.out.println(totalMin);
-            
-            //입차 일때
-            if(parkOrNot.equals("IN")){
-                inAndOut.put(num,totalMin);
+        Map<String, Integer> timeMap = new HashMap<>();
+        Map<String, Integer> accumulateTime = new TreeMap<>();
+        for(String s:records){
+            String[] sInfo = s.split(" ");
+            String t = sInfo[0];
+            String num = sInfo[1];
+            String inOut = sInfo[2];
+            // System.out.println(Arrays.toString(sInfo));
+            //in이면
+            if(inOut.equals("IN")){
+                timeMap.put(num,toMinute(t));
             }
-            //출차 일때
+            //out이면
             else{
-                int inTime = inAndOut.get(num);
-                minuteTotal.put(num,minuteTotal.getOrDefault(num,0)+(totalMin-inTime));
-                inAndOut.remove(num);
+                //기존 IN 시간 가져와서
+                int inTime = timeMap.get(num);
+                timeMap.put(num,-1);
+                //accumulateTime에 누적
+                accumulateTime.put(num, accumulateTime.getOrDefault(num,0) + toMinute(t) - inTime);
+            } 
+        }
+        //-1이 아닌 숫자가 들어있는 애들은 출차가 안됐으므로 누적을 따로 해줘야함
+        for(String num:timeMap.keySet()){
+            if(timeMap.get(num) != -1){
+                int inTime = timeMap.get(num);
+                accumulateTime.put(num, accumulateTime.getOrDefault(num,0) + 23*60+59 - inTime);
+
             }
+        }
+        List<Integer> ansTmp = new ArrayList<>();
+        //시간별로 요금 계산
+        for(String s:accumulateTime.keySet()){
+            ansTmp.add(fee(accumulateTime.get(s),fees));
             
         }
-        // System.out.println(minuteTotal);
-        //현재 남아있는 번호에 대해서는 lastClock에서 빼서 남은시간을 더해준다.
-        for(String car:inAndOut.keySet()){
-            // System.out.println(car +" "+(lastClock-inAndOut.get(car))+" "+inAndOut.get(car));
-            minuteTotal.put(car,minuteTotal.getOrDefault(car,0)+(lastClock-inAndOut.get(car)));
+        int[] ans = new int[ansTmp.size()];
+        for(int i=0;i<ansTmp.size();i++){
+            ans[i] = ansTmp.get(i);
         }
         
+        return ans;
+    }
+    
+    public int toMinute(String s){
+        String[] sArray = s.split(":");
+        // System.out.println(Arrays.toString(sArray));
+        int h = Integer.parseInt(sArray[0]);
+        int m = Integer.parseInt(sArray[1]);
         
-        List<String> mapKey = new ArrayList<>(minuteTotal.keySet());
-        int[] answer = new int[mapKey.size()];
-        Collections.sort(mapKey);
-        // 기본 시간
-        int defaultTime= fees[0];
-        // 기본 요금
-        int defaultFee = fees[1];
-        // 단위 시간
-        int unitTime = fees[2];
-        // 단위 요금
-        int unitFee = fees[3];
-        
-        for(int i=0;i<mapKey.size();i++){
-            //사용시간
-            int carTime = minuteTotal.get(mapKey.get(i));
-            //나머지
-            
-            if(carTime>defaultTime){
-                int remain = (carTime - defaultTime)%unitTime;
-                if(remain>0){
-                    answer[i] = defaultFee+((carTime - defaultTime)/unitTime+1)*unitFee;
-                }
-                else{
-                    answer[i] = defaultFee+((carTime - defaultTime)/unitTime)*unitFee;
-                }
-            }
-            else{
-                answer[i] = defaultFee;
-            }
-            
+        return h*60 + m;
+    }
+    
+    public int fee(int time, int[] fees){
+        int basicT = fees[0];
+        int basicF = fees[1];
+        int unitT = fees[2];
+        int unitF = fees[3];
+        if(time<=basicT){
+            return basicF;
         }
-        return answer;
+        else{
+            int extraFee = (time-basicT)%unitT == 0 ? (time-basicT)/unitT*unitF:(time-basicT)/unitT*unitF+unitF;
+                extraFee += basicF;
+                return extraFee;
+        }
     }
 }
