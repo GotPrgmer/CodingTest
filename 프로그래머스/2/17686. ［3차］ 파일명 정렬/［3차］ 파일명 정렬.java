@@ -1,69 +1,79 @@
 import java.util.*;
 class Solution {
     public String[] solution(String[] files) {
-        List<File> list = new ArrayList<>();
-        for(int i =0;i<files.length;i++){
-            String[] thisSep =seperate(files[i]);
-            list.add(new File(thisSep[0],thisSep[1],i));
+        List<Filename> list = new ArrayList<>();
+        //문자와 숫자로 나누기
+        for(int i=0;i<files.length;i++){
+            //문자열
+            String s = extractString(files[i]);
+            int num = extractInt(files[i],s.length());
+            Filename f = new Filename(files[i],s,num);
+            list.add(f);
         }
         Collections.sort(list);
-        String[] answer = new String[files.length];
+        // for(Filename f:list){
+        //     System.out.println(f.head +" " + f.number);
+        // }
+        String[] answer = new String[list.size()];
         for(int i=0;i<list.size();i++){
-            answer[i] = files[list.get(i).tail];
+            answer[i] = list.get(i).original;
         }
+        
         return answer;
     }
-    
-    public String[] seperate(String word){
-        //head와 num으로 나눠서 String[]에 넣어서 호출
-        int numStart = -1;
-        int tailStart = word.length();
-        //tail이 없을수도 있음.
-        for(int i=0;i<word.length();i++){
-            char c = word.charAt(i);
-            //숫자
-            if(Character.isDigit(c) && numStart == -1){
-                numStart = i;
+    // 문자추출
+    public String extractString(String file){
+        StringBuilder sb = new StringBuilder();
+        for(char c:file.toCharArray()){
+            if(!Character.isDigit(c)){
+                sb.append(c);
             }
-            else if(!Character.isDigit(c) && numStart != -1){
-                tailStart = i;
+            else{
                 break;
             }
         }
-        //tail이 없을 수도 있음.
-        return new String[]{word.substring(0,numStart),word.substring(numStart,tailStart)};
+        return sb.toString();
     }
-class File implements Comparable<File>{
-    String head;
-    String num;
-    int tail;
-    public File(String head, String num, int tail){
-        this.head = head;
-        this.num = num;
-        this.tail = tail;
-    }
-    @Override
-    public int compareTo(File f){
-        String first = this.head.toLowerCase();
-        String second = f.head.toLowerCase();
-        if(first.equals(second)){
-            //숫자로 정렬
-            int thisNum = Integer.parseInt(this.num);
-            int inputNum = Integer.parseInt(f.num);
-            //숫자가 같으면 인덱스로 정렬
-            if(thisNum == inputNum){
-                // System.out.println("같은 수"+thisNum);
-                return this.tail - f.tail;
+    
+    // 숫자추출
+    public int extractInt(String file,int start_idx){
+     StringBuilder sb = new StringBuilder();
+        for(int i=start_idx;i<file.length();i++){
+            if(Character.isDigit(file.charAt(i))){
+                sb.append(file.charAt(i));
             }
             else{
-                return thisNum-inputNum;
+                break;
             }
         }
-        else{
-            return first.compareTo(second);
-        }
+        return Integer.valueOf(sb.toString());
+    }
+}
+class Filename implements Comparable<Filename>{
+    String original;
+    String head;
+    int number;
+    
+    public Filename (String original, String head, int number){
+        this.original = original;
+        this.head = head;
+        this.number = number;
     }
     
-    
-}
+    @Override
+    public int compareTo(Filename filename){
+        if(!this.head.toUpperCase().equals(filename.head.toUpperCase())){
+            
+            return this.head.toUpperCase().compareTo(filename.head.toUpperCase());
+        }
+        else{
+            if(this.number != filename.number){
+                return this.number - filename.number;
+            }
+            else{
+                return 0;
+            }
+            
+        }
+    }
 }
