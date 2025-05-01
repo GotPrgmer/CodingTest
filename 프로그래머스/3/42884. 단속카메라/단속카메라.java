@@ -15,7 +15,6 @@ class Solution {
         int cnt = 1;
         for(int i=1;i<routes.length;i++){
             int[] cur = pq.poll();
-            //범위 이내
             if(cctv_loc > cur[1]){
                 cctv_loc = cur[1];
             }
