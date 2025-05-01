@@ -1,121 +1,145 @@
 import java.util.*;
 class Solution {
-    static Set<Pair> set;
-    static char[][] cur;
+    static Set<String> visited;
+    static int[] d_r = {0,1,1};
+    static int[] d_c = {1,1,0}; 
+    static char[][] board_char;
     public int solution(int m, int n, String[] board) {
-        cur = new char[board.length][board[0].length()];
-        for(int i =0;i<board.length;i++){
+        board_char = new char[board.length][board[0].length()];
+        for(int i=0;i<board.length;i++){
             for(int j=0;j<board[0].length();j++){
-                cur[i][j] = board[i].charAt(j);
+                board_char[i][j] = board[i].charAt(j);
             }
         }
-        int answer = 0;
+        int ans = 0;
         while(true){
-            set = new HashSet<>();
-            // 특정 index에서 2x2찾아서 set에 좌표넣는 로직
-            for(int i =0;i<board.length;i++){
-                for(int j=0;j<board[0].length();j++){
-                    if(cur[i][j] != '0' && 'A'<=cur[i][j] && cur[i][j]<='Z'){
-                        insert(new Pair(i,j),m,n);
-                    }
-                }
-            }
-            //set에 들어가있는걸 제거함
-            if(set.size()==0){
+            int cnt = exploreAndRemove(m,n);
+            ans += cnt;
+            down(m,n);
+            if(cnt==0){
                 break;
             }
-            for(Pair pair:set){
-                System.out.println(pair);
-                cur[pair.r][pair.c] = '0';
-                answer += 1;
-            }
-            // System.out.println("---------------");
-
-            //떨어지는 로직
-            fall(m,n);
-            
         }
         
-        
-        
-        return answer;
+        // for(int i=0;i<m;i++){
+        //     System.out.println(Arrays.toString(board_char[i]));
+        // }
+        return ans;
     }
-    // 특정 inde에서 2x2찾아서 Set에 2x2좌표들 다 넣기
-    public void insert(Pair p,int m,int n){
-        int r = p.r;
-        int c = p.c;
-        boolean flag = true;
-        for(int i=r;i<r+2;i++){
-            for(int j=c;j<c+2;j++){
-                //영역 안넘는지
-                if(0<=i && i<m & 0<=j && j<n){
-                    //값이 p와 같은지
-                    if(cur[i][j] != cur[p.r][p.c] || 'A'>cur[p.r][p.c] || cur[p.r][p.c]>'Z' ){
-                        flag = false;
-                        break;
-                    }
+    
+    public void down(int m, int n){
+        //각 열에서 리스트를 만들어서 맨 아래부터 다시 채워넣기 나머지는 !로 통일
+        List<Character> list;
+        char[][] new_char = new char[m][n];
+        for(int c=0;c<n;c++){
+            for(int r=m-1;r>-1;r--){
+                new_char[r][c] = '!';
+            }
+                // if(m-1-r<list.size()){
+                //     board_char[r][c] = list.get(m-1-r);
+                // }
+            // list = new ArrayList<>();
+            int tmp_r =m-1;
+            for(int r=m-1;r>-1;r--){
+                if(board_char[r][c] != '!'){
+                    new_char[tmp_r--][c] = board_char[r][c];
                 }
-                else{
-                    flag = false;
-                    break;
+            }
+            //list사이즈 만큼 board_char에 넣기 나머지는 느낌표로 채우기
+            
+        }
+        board_char = new_char;
+    }
+    
+    public int exploreAndRemove(int r_m, int c_n){
+        visited = new HashSet<>();
+        int cnt = 0;
+        for(int i=0;i<r_m;i++){
+            for(int j=0;j<c_n;j++){
+                if(!visited.contains(i+" "+j) && board_char[i][j]!='!'){
+                    cnt += erase(i,j);
                 }
+            }
+        }
+        return cnt;
+        
+    }
+    
+    public int erase(int r, int c){
+        int r_m = board_char.length;
+        int c_n = board_char[0].length;
+        int cnt = 0;
+        Set<String> erase_set = new HashSet<>();
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{r,c});
+        visited.add(r+" "+c);
+        while(!q.isEmpty()){
+            int[] cur = q.poll();
+            int cur_r = cur[0];
+            int cur_c = cur[1];
+            //아래 오른쪽 대각선 아래 전부 일치하면 erase큐에 넣어주고
+            
+            if(threeCheck(cur_r,cur_c)){
+                erase_set.add(cur_r +" "+cur_c);
+                for(int d=0;d<3;d++){
+                int n_r = cur_r+d_r[d];
+                int n_c = cur_c+d_c[d];
                 
-            }
-        }
-            //set에 넣기
-            if(flag == true){
-                for(int k=r;k<r+2;k++){
-                    for(int j=c;j<c+2;j++){
-                        set.add(new Pair(k,j));
-                    }
+                if(!visited.contains(n_r +" "+ n_c)){
+                    //q에 넣기
+                    erase_set.add(n_r+" "+n_c);
+                    visited.add(n_r +" "+ n_c);
+                    q.add(new int[]{n_r,n_c});
                 }
-            
-        }
-    }
-    // 떨어지는 로직
-    public void fall(int m, int n){
-        //열을 돌면서 행으로 밑으로 내려가면서 문자가 있으면 while문으로 범위가 허락된 상태에서 연속된 가장 낮은
-        // 공간을 찾아서 넣는다.
-        for(int i=0;i<n;i++){
-            List<Character> list = new ArrayList<>();
-            for(int j=0;j<m;j++){
-                if(cur[j][i] !='0'){
-                    list.add(cur[j][i]);
                 }
             }
-            //리스트 수만큼 넣어준다.
-            for(int j=0;j<list.size();j++){
-                cur[j+(m-list.size())][i] = list.get(j);
-            }
-            for(int j=0;j<m-list.size();j++){
-                cur[j][i] = '0';
-            }
+            
             
         }
+        // System.out.println(erase_set.size());
+
+        for(String i:erase_set){
+            String[] cur_e = i.split(" ");
+            int e_r = Integer.parseInt(cur_e[0]);
+            int e_c = Integer.parseInt(cur_e[1]);
+            cnt += 1;
+            board_char[e_r][e_c] = '!';
+        }
+        // System.out.println(r+" "+c+" "+cnt);
+        return cnt;
+        
     }
-    class Pair{
-        int r;
-        int c;
-        public Pair(int r,int c){
-            this.r = r;
-            this.c = c;
+    
+    public boolean check(int r, int c,int r_m, int c_n){
+        if(r>=0 && r<r_m && c>=0 && c<c_n){
+            return true;
         }
-        @Override
-        public String toString(){
-            return this.r +" "+ this.c;
-        }
-        @Override
-        public boolean equals(Object o){
-            if (!(o instanceof Pair))
+        else{
             return false;
-            Pair p = (Pair) o;
-            return this.r == p.r && this.c == p.c;
+        }
+    }
+    public boolean threeCheck(int r, int c){
+        int right_r =r;
+        int right_c =c+1;
+        int down_r =r+1;
+        int down_c =c;
+        int di_r= r+1;
+        int di_c= c+1;
+        if(check(right_r,right_c,board_char.length,board_char[0].length) &&
+           check(down_r,down_c,board_char.length,board_char[0].length) 
+           && check(di_r, di_c,board_char.length,board_char[0].length )){
+            if(board_char[right_r][right_c] == board_char[r][c] &&
+              board_char[down_r][down_c] == board_char[r][c] &&
+              board_char[di_r][di_c] == board_char[r][c] ){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
         }
         
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.r, this.c);
-        }
     }
 }
-
