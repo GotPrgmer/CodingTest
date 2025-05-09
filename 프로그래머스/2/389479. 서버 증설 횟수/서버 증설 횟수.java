@@ -1,25 +1,20 @@
 import java.util.*;
 class Solution {
     public int solution(int[] players, int m, int k) {
-        PriorityQueue<int[]> q = new PriorityQueue<>((o1,o2)->o1[0]-o2[0]);
         int answer = 0;
-        int size = 0;
-        for(int i=0;i<24;i++){
-            //일단 뺄 수 있는 서버들 다 빼야함
-            while(!q.isEmpty() && q.peek()[0]==i){
-                int minusServer = q.poll()[1];
-                size -= minusServer;
+        int[] server = new int[players.length];
+        
+        for(int i=0;i<players.length;i++){
+            int cur_player_cnt = players[i];
+            
+            if(cur_player_cnt/m <= server[i]) continue;
+                
+            for(int j=1;j<k && (i+j)<players.length;j++){
+                server[i+j] += cur_player_cnt/m - server[i];
             }
-            //더 필요한 서버가 잇는지 체크
-            int need = players[i]/m;
-            int more = size-need;
-            if(more <0){
-                more = - more;
-                answer += more;
-                q.add(new int[]{i+k,more});
-                size += more;
-            }
+            answer += cur_player_cnt/m - server[i];
         }
+        
         return answer;
     }
 }
