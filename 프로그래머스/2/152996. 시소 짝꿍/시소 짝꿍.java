@@ -1,33 +1,38 @@
+import java.util.*;
 class Solution {
     public long solution(int[] weights) {
-        int[] weightCnt = new int[1001];
-        int[] mulWeight = new int[4001];
-        long answer = 0;
+        Map<Double,Integer> map = new HashMap<>();
+        Set<Double> set = new HashSet<>();
+        Arrays.sort(weights);
+        long ans = 0;
         for(int i=0;i<weights.length;i++){
-            long curCnt = weightCnt[weights[i]];
-            int m2 = weights[i]*2;
-            int m3 = weights[i]*3;
-            int m4 = weights[i]*4;
-            //1개이상있었다면
-            if(curCnt>0){
-                answer += curCnt;
-                answer += mulWeight[m2]-curCnt;
-                answer += mulWeight[m3]-curCnt;
-                answer += mulWeight[m4]-curCnt;
-            }
-            else{
-                answer += mulWeight[m2];
-                answer += mulWeight[m3];
-                answer += mulWeight[m4];
-            }
             
-            weightCnt[weights[i]] += 1;
-            mulWeight[m2] += 1;
-            mulWeight[m3] += 1;
-            mulWeight[m4] += 1;
-                
+            double original = weights[i] *1.0;
+            double a = (weights[i] *2.0)/3.0;
+            double b = (weights[i]*1.0) /2.0;
+            double c = (weights[i] *3.0)/4.0;
+            
+            if(map.keySet().contains(a)){
+                ans += map.get(a);
             }
-        return answer;
+            if(map.keySet().contains(b)){
+                ans += map.get(b);
+            }
+            if(map.keySet().contains(c)){
+                ans += map.get(c);
+            }
+            if(map.keySet().contains(original)){
+                ans += map.get(original);
+            }
+            map.put(original,map.getOrDefault(original,0)+1);
         }
-        
+        // long ans = 0;
+        // for(Double i:map.keySet()){
+        //     ans += map.get(i)-1;
+        // }
+        System.out.println(map);
+        return ans;
     }
+    
+    
+}
