@@ -26,11 +26,6 @@ class Solution {
             }
             map.put(original,map.getOrDefault(original,0)+1);
         }
-        // long ans = 0;
-        // for(Double i:map.keySet()){
-        //     ans += map.get(i)-1;
-        // }
-        System.out.println(map);
         return ans;
     }
     
