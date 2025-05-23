@@ -1,68 +1,67 @@
 import java.util.*;
 class Solution {
-    static List<Node>[] list;
+    static List<List<int[]>> graph;
     public int solution(int N, int[][] road, int K) {
-        //좌표
-        list = new ArrayList[N+1];
-        int answer = 0;
-        //다익스트라
-        for(int i=1;i<N+1;i++){
-            list[i] = new ArrayList<>();
+        
+        graph = new ArrayList<>();
+        for(int i=0;i<N+1;i++){
+            graph.add(new ArrayList<>());
         }
-        //그래프 정보 넣기
+        //그래프 초기화
         for(int i=0;i<road.length;i++){
             int a = road[i][0];
             int b = road[i][1];
-            int c = road[i][2];
-            list[a].add(new Node(b,c));
-            list[b].add(new Node(a,c));
+            int t = road[i][2];
+            graph.get(a).add(new int[]{b,t});
+            graph.get(b).add(new int[]{a,t});
+            // System.out.println(graph.get(a));
         }
-        //다익스트라 돌리기
-        int[] values = dijkstra(1,N);
-        for(int i=1;i<values.length;i++){
-            if(values[i]<=K){
+        //다익스트라
+        int[] distance = dijkstra(1,N);
+        // System.out.println(Arrays.toString(distance));
+        int answer = 0;
+        for(int i=1;i<distance.length;i++){
+            if(distance[i]<=K){
                 answer += 1;
             }
         }
-        
-        // [실행] 버튼을 누르면 출력 값을 볼 수 있습니다.
-        System.out.println(Arrays.toString(values));
-
         return answer;
     }
-    public int[] dijkstra(int i,int n){
-        boolean[] visited = new boolean[n+1];
-        int[] dp = new int[n+1];
-        Arrays.fill(dp,Integer.MAX_VALUE);
-        System.out.println(Arrays.toString(dp));
-        Queue<Node> q = new PriorityQueue<>();
-        q.add(new Node(1,0));
-        // visited[i] = true;
-        while(!q.isEmpty()){
-            Node cur = q.poll();
-            if(visited[cur.to]) continue;
-            else visited[cur.to]=true;
-            dp[cur.to] = cur.cost;
-            for(Node next:list[cur.to]){
-                if(dp[next.to] >= next.cost+dp[cur.to]){
-                    q.add(new Node(next.to,next.cost+dp[cur.to]));
-                    // visited[next.to] = true;
+    
+    public int[] dijkstra(int start,int N){
+        PriorityQueue<int[]> pq = new PriorityQueue<>(new Comparator<>(){
+            @Override
+            public int compare(int[] i1, int[] i2){
+                return i1[0]-i2[0];
+            }
+        });
+        int[] distance = new int[N+1];
+        for(int i=1;i<distance.length;i++){
+            distance[i] = Integer.MAX_VALUE;
+        }
+        Set<Integer> visited = new HashSet<>();
+        distance[1] = 0;
+        pq.add(new int[]{0,start});
+        while(visited.size()!=N && pq.size()!=0){
+            int[] cur = pq.poll();
+            int cur_node = cur[1];
+            int cur_time = cur[0];
+            // System.out.println(cur_node);
+            if(visited.contains(cur_node)){
+                continue;
+            }
+            visited.add(cur_node);
+            //갱신
+            for(int[] i:graph.get(cur_node)){
+                // System.out.println(i[0]);
+                if(distance[i[0]] > cur_time + i[1] && !visited.contains(i[0])){
+                    // visited.add(i[0]);
+                    distance[i[0]] = cur_time + i[1];
+                    pq.add(new int[]{distance[i[0]],i[0]});
                 }
             }
             
         }
-        return dp;
-    }
-    public class Node implements Comparable<Node>{
-        int to;
-        int cost;
-        public Node(int to,int cost){
-            this.to = to;
-            this.cost = cost;
-        }
-        @Override
-        public int compareTo(Node n){
-            return Integer.compare(this.cost, n.cost);
-        } 
+        return distance;
     }
 }
