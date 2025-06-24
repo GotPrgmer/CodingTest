@@ -1,36 +1,36 @@
 import java.util.*;
 class Solution {
     public int[] solution(int n, long k) {
-        // entire/숫자수 = unit
-        // k/unit = 몫 인덱스 추가
-        // k%unit 으로 나머지 연산
-        long entire = entire(n);
-        int[] answer = new int[n];
+        long entire = calculateEntire(n);
         int num = n;
-        k -= 1;
         List<Integer> nums = new ArrayList<>();
         for(int i=1;i<n+1;i++){
             nums.add(i);
         }
-        for(int i=0;i<n;i++){
+        k -= 1;
+        int[] answer = new int[n];
+        for(int i=0;i<answer.length;i++){
+            // 해당 index에 들어갈 숫자 구해서 넣기
             long unit = entire/num;
-            int idx = 0;
-            if(k/unit>=Integer.MIN_VALUE && k/unit<=Integer.MAX_VALUE){
-                idx = (int)(k/unit);
+            long numIdxLong = k/unit;
+            int numIdx = 0;
+            if (numIdxLong >= Integer.MIN_VALUE && numIdxLong <= Integer.MAX_VALUE) {
+                numIdx = (int) numIdxLong;
             }
-            answer[i] = nums.get(idx);
-            nums.remove(idx);
+            answer[i] = nums.get(numIdx);
+            nums.remove(numIdx);
+            k = k%unit;
             entire = entire/num;
             num -= 1;
-            k = k%unit;
         }
         return answer;
     }
-    public long entire(int n){
-        long tmp = 1;
-        for(int i=1;i<n+1;i++){
-            tmp *= i;
+    
+    public long calculateEntire(int n){
+        long num = 1;
+        for(int i=n;i>0;i--){
+            num *= i;
         }
-        return tmp;
+        return num;
     }
 }
