@@ -1,46 +1,36 @@
+import java.util.*;
 class Solution {
     public int[] solution(int n, long k) {
-        long divide = 1;
+        // entire/숫자수 = unit
+        // k/unit = 몫 인덱스 추가
+        // k%unit 으로 나머지 연산
+        long entire = entire(n);
         int[] answer = new int[n];
-        boolean[] visited = new boolean[n+1];
-        for(int i=2;i<n;i++){
-            divide *= i;
-        }
-        //1을 빼고
+        int num = n;
         k -= 1;
-        int idx = 0;
-        long turn = n-1;
-        long share=1;
-        while(idx<n){
-            // System.out.println(share+" "+k+" "+divide+" "+idx+" "+n+" "+turn);
-            if(divide>0){
-                share = (long)(k/divide)+1L;
-                k = k%divide;
+        List<Integer> nums = new ArrayList<>();
+        for(int i=1;i<n+1;i++){
+            nums.add(i);
+        }
+        for(int i=0;i<n;i++){
+            long unit = entire/num;
+            int idx = 0;
+            if(k/unit>=Integer.MIN_VALUE && k/unit<=Integer.MAX_VALUE){
+                idx = (int)(k/unit);
             }
-            int cnt = 0;
-            
-           if (turn > 0) {
-                divide = divide / turn;
-               turn-=1;
-            }
-            // devide = devide/turn;
-            
-            // break;
-            for(int i=1;i<=n;i++){
-                if(!visited[i]){
-                    cnt += 1;
-                }
-                if(cnt==share){
-                    answer[idx] = i;
-                    idx += 1;
-                    visited[i] = true;
-                    break;
-                }
-            }
-            // devide = (long)devide/turn;
-            // turn -= 1;
-            
+            answer[i] = nums.get(idx);
+            nums.remove(idx);
+            entire = entire/num;
+            num -= 1;
+            k = k%unit;
         }
         return answer;
+    }
+    public long entire(int n){
+        long tmp = 1;
+        for(int i=1;i<n+1;i++){
+            tmp *= i;
+        }
+        return tmp;
     }
 }
