@@ -16,7 +16,6 @@ public class Main {
             int n = Integer.parseInt(stringToken.nextToken());
             list.add(n);
         }
-        StringBuilder sb = new StringBuilder();
         List<Integer> ans = new ArrayList<>();
         for(int i=0;i<list.size();i++){
             if(st.isEmpty()){
