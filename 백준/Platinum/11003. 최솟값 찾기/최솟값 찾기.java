@@ -17,18 +17,24 @@ public class Main {
         for(int i=0;i<N;i++){
             int num = Integer.parseInt(st.nextToken());
             //첫 L개(맨 처음 슬라이딩 윈도우 만듦)
-            if(dq.isEmpty()){
-                dq.addLast(new Pair(i,num));
+            if(i<L){
+                if(!dq.isEmpty()){
+                    while(!dq.isEmpty() && dq.peekLast().v > num){
+                        dq.pollLast();
+                    }
+                }
             }
             else{
                 if(dq.peekFirst().i+(L-1)<i){
                     dq.pollFirst();
                 }
-                while(!dq.isEmpty() && dq.peekLast().v > num){
-                    dq.pollLast();
+                if(!dq.isEmpty()){
+                    while(!dq.isEmpty() && dq.peekLast().v > num){
+                        dq.pollLast();
+                    }
                 }
-                dq.addLast(new Pair(i,num));
             }
+            dq.addLast(new Pair(i,num));
             ans[i] = dq.peekFirst().v;
         }
         StringBuilder sb = new StringBuilder();
