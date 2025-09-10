@@ -11,16 +11,15 @@ public class Main {
             char[] cmd = br.readLine().toCharArray();
             boolean isFlag = true;
             int n = Integer.parseInt(br.readLine());
-            String[] listProcessing = br.readLine().split("\\[")[1].split("]");
-            String[] list = new String[0];
+            String arr = br.readLine();
             Deque<Integer> dq = new ArrayDeque<>();
-            if(listProcessing.length !=0){
-                list = listProcessing[0].split(",");
-                dq = new ArrayDeque<>();
-            }
 
-            for (String s : list) {
-                dq.addLast(Integer.parseInt(s));
+            // 배열 파싱 ( [] 제거 후 split )
+            if (n > 0) {
+                arr = arr.substring(1, arr.length() - 1);
+                for (String s : arr.split(",")) {
+                    dq.addLast(Integer.parseInt(s));
+                }
             }
             for(int j=0;j<cmd.length;j++){
                 if(cmd[j] == 'R'){
