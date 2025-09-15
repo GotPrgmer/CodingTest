@@ -21,7 +21,7 @@ public class Main {
         for(int i=0;i<n;i++){
             String line = br.readLine();
             for(int j=0;j<m;j++){
-                board[i][j] = Integer.parseInt(String.valueOf(line.charAt(j)));
+                board[i][j] = line.charAt(j) - '0';
             }
         }
         //dist 초기화
