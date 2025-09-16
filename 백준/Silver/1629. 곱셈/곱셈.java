@@ -17,9 +17,15 @@ public class Main {
         if(B==1){
             return A%C;
         }
-        long val = cal(A,B/2,C);
-        val = val*val%C;
-        if(B%2==0) return val;
-        return val*A%C;
+        else{
+            long val = cal(A,B/2,C);
+            val = (val * val) % C;
+            if(B%2 == 0){
+                return val%C;
+            }
+            else{
+                return val*A%C;
+            }
+        }
     }
 }
