@@ -14,17 +14,20 @@ public class Main {
 
     }
     static long cal(int A, int B, int C){
-        if(B==1){
+        if(B==0){
+            return 1;
+        }
+        else if(B==1){
             return A%C;
         }
         else{
-            long val = cal(A,B/2,C);
-            val = (val * val) % C;
+            long val = cal(A,B/2,C)%C;
+            val = val*val%C;
             if(B%2 == 0){
-                return val%C;
+                return val;
             }
             else{
-                return val*A%C;
+                return val*(A%C)%C;
             }
         }
     }
