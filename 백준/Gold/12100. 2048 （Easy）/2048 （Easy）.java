@@ -27,7 +27,9 @@ public class Main {
 //            System.out.println("처음");
             //copy 원복
             for(int copy_x=0;copy_x<N;copy_x++){
-                copy[copy_x] = Arrays.copyOf(board[copy_x], N);
+                for(int copy_y=0;copy_y<N;copy_y++){
+                    copy[copy_x][copy_y] = board[copy_x][copy_y];
+                }
             }
 
             int brute = i;
