@@ -14,24 +14,18 @@ public class Main {
                 weight[i] = Integer.parseInt(st.nextToken());
                 value[i] = Integer.parseInt(st.nextToken());
             }
-            int[][] dp = new int[N][100001];
-            for(int i=0;i<K+1;i++){
-                if(i>=weight[0]){
-                    dp[0][i] = value[0];
-                }
-            }
-            
-            for(int i=1;i<N;i++){
-                for(int j=1;j<K+1;j++){
-                    // i를 선택하지 않을 때
-                    dp[i][j] = dp[i-1][j];
-                    // i를 선택했을때 최대값
-                    // dp[i-1][j]가 0이 아닐때 추가할수있음
-                    if(j-weight[i]>=0){
-                        dp[i][j] = Math.max(dp[i][j], dp[i - 1][j-weight[i]]+value[i]);
+            int[] dp = new int[100001];
+            for(int i=0;i<N;i++){
+                //무게
+                for(int j=K;j>-1;j--){
+                    if(i==0 && j>=weight[0]){
+                        dp[j] = value[0];
+                    }
+                    else if(j-weight[i]>=0){
+                            dp[j] = Math.max(dp[j], dp[j-weight[i]]+value[i]);
                     }
                 }
             }
-            System.out.println(dp[N-1][K]);
+            System.out.println(dp[K]);
         }
 }
