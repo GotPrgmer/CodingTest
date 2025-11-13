@@ -20,24 +20,27 @@ public class Main {
         System.out.println(bfs());
     }
     public static int bfs(){
-        Queue<Integer> q = new ArrayDeque<>();
-        q.add(1);
-        visited[1] =  true;
-        int ans = 0;
-        int t=2;
-        while(t-->0){
-            int size = q.size();
-            for(int i=0;i<size;i++){
-                int cur = q.poll();
-                for(int nxt:graph[cur]){
-                    if(visited[nxt]) continue;
-                    ans++;
-                    q.add(nxt);
-                    visited[nxt] = true;
-                }
-            }
+            Queue<int[]> q = new ArrayDeque<>();
+    q.add(new int[]{1, 0});
+    visited[1] = true;
+    int ans = 0;
+
+    while (!q.isEmpty()) {
+        int[] cur = q.poll();
+        int node = cur[0];
+        int depth = cur[1];
+
+        // 깊이가 2 이상이면 더 확장하지 않음
+        if (depth == 2) continue;
+
+        for (int nxt : graph[node]) {
+            if (visited[nxt]) continue;
+            visited[nxt] = true;
+            ans++;
+            q.add(new int[]{nxt, depth + 1});
         }
-        return ans;
+    }
+    return ans;
 
     }
 }
