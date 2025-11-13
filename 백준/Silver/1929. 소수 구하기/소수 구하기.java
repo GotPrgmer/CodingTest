@@ -1,34 +1,31 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
+import java.util.*;
+import java.io.*;
 public class Main {
-    public static boolean[] isPrime;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int M = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
         StringBuilder sb = new StringBuilder();
-        String[] input = br.readLine().split(" ");
-        int M = Integer.parseInt(input[0]);
-        int N = Integer.parseInt(input[1]);
-        isPrime = new boolean[N + 1];
-        for(int checkIdx=0;checkIdx<Integer.parseInt(input[1])+1;checkIdx++){
-            isPrime[checkIdx]=true;
-        }
-        isPrime[0]=false;
-        isPrime[1]=false;
-        for (int idx = 2; idx < Math.sqrt(N) + 1; idx++) {
-            if(isPrime[idx]){
-                for(int curIdx=idx*2;curIdx<N+1;curIdx += idx){
-                    isPrime[curIdx]= false;
-                }
-
-            }
-        }
-        for(int numIdx=M;numIdx<N+1;numIdx++){
-            if (isPrime[numIdx]) {
-                sb.append(numIdx).append("\n");
-            }
-        }
+        for(int p:eratosChecker(M,N)) sb.append(p).append("\n");
         System.out.println(sb);
+    }
+    static List<Integer> eratosChecker(int M, int N){
+        boolean[] isPrimes = new boolean[N + 1];
+        List<Integer> ans = new ArrayList<>();
+        Arrays.fill(isPrimes, true);
+        isPrimes[0] = false;
+        isPrimes[1] = false;
+        for(int i=2;i*i<=N;i++){
+            if(!isPrimes[i]) continue;
+            for (int j = i * i; j <= N; j += i) {
+                isPrimes[j] = false;
+            }
+        }
+        for (int i = M; i <= N; i++) {
+            if(isPrimes[i]) ans.add(i);
+        }
+        return ans;
+
     }
 }
