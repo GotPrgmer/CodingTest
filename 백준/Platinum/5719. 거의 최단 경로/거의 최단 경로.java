@@ -75,16 +75,17 @@ public class Main {
         while (!q.isEmpty()) {
             int v = q.poll();
             for (int u : prev[v]) {
+                if (!visited[u]) {
+                    visited[u] = true;
+                    q.add(u);
+                }
                 // u -> v 로 가는 간선 중, dist1[u] + w == dist1[v] 를 만족하는 것만 제거
                 for (Pair5719 e : graph[u]) {
                     if (e.node == v && dist[u] != INF && dist[u] + e.weight == dist[v]) {
                         e.removed = true;
                     }
                 }
-                if (!visited[u]) {
-                    visited[u] = true;
-                    q.add(u);
-                }
+
             }
         }
 
