@@ -9,16 +9,23 @@ public class Main {
         int[] dp = new int[W+1];
         for(int t=0;t<T;t++){
             int cur = Integer.parseInt(br.readLine());
-            for (int w = W; w >= 0; w--) {
-                int pos = (w % 2 == 0) ? 1 : 2;
-                int get = (pos == cur) ? 1 : 0;
-                if (w == 0) {
-                    dp[w] += get;
-                } else {
-                    dp[w] = Math.max(dp[w], dp[w - 1]) + get;
+            for(int w=W;w>-1;w--){
+                if((w+1)%2 == cur%2){
+                    if(w==0){
+                        dp[w] += 1;
+                    }
+                    else{
+                        dp[w] = Math.max(dp[w], dp[w - 1])+1;
+                    }
+                }
+                else{
+                    if(w!=0){
+                        dp[w] = Math.max(dp[w], dp[w - 1]);
+                    }
                 }
             }
         }
+
         int ans = 0;
         for(int i=0;i<W+1;i++){
             ans = Math.max(ans, dp[i]);
