@@ -16,7 +16,7 @@ public class Main {
         }
         int[] lose = new int[N+1];
         int[] happy = new int[N+1];
-        int[][] dp = new int[N+1][101];
+        int[] dp = new int[101];
         StringTokenizer st = new StringTokenizer(br.readLine());
         for(int i=1;i<N+1;i++){
             lose[i] = Integer.parseInt(st.nextToken());
@@ -27,17 +27,11 @@ public class Main {
         }
 
         for(int i=1;i<N+1;i++){
-            for(int j=0;j<101;j++){
-                if(j>lose[i]){
-                    dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - lose[i]] + happy[i]);
-                }
-                else{
-                    dp[i][j] = dp[i-1][j];
-                }
-
+            for(int j=100;j>lose[i];j--){
+                dp[j] = Math.max(dp[j], dp[j - lose[i]] + happy[i]);
             }
         }
-        System.out.println(dp[N][100]);
+        System.out.println(dp[100]);
 
     }
 }
