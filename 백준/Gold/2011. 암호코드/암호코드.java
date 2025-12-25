@@ -20,7 +20,7 @@ public class Main {
             char one = s.charAt(i - 1);
             char ten = s.charAt(i - 2);
             if (one != '0') {
-                dp[i] = dp[i - 1] % MOD;
+                dp[i] = (dp[i] + dp[i - 1]) % MOD;
             }
             int num = (ten - '0') * 10 + (one - '0');
             if(num>=10 && num<=26){
