@@ -7,25 +7,20 @@ public class Main {
     static List<Node>[] adj;
 
     static int miniBomb(int cur, int parent, int cost){
-//        System.out.println(cur);
-        int val = 0;
-        if(cur == 1){
-            for (Node nxt : adj[cur]) {
-                if(nxt.to != parent){
-                    val += miniBomb(nxt.to,cur,nxt.w);
-                }
-            }
-            return val;
-        }
+        int sum = 0;
+        boolean hasChild = false;
+
         for (Node nxt : adj[cur]) {
-            if(nxt.to != parent){
-                val += miniBomb(nxt.to,cur,nxt.w);
-            }
+            if (nxt.to == parent) continue;
+            hasChild = true;
+            sum += miniBomb(nxt.to, cur, nxt.w);
         }
-        if(val == 0){
-            return cost;
-        }
-        return Math.min(val,cost);
+
+        // 리프면 자식 쪽에서 막을 방법이 없으니, 들어오는 간선을 끊는 비용(cost) 그대로
+        if (!hasChild) return cost;
+
+        // 내부 노드: 아래에서 막는 비용(sum) vs 여기서 끊는 비용(cost)
+        return Math.min(sum, cost);
     }
 
     public static void main(String[] args) throws IOException{
@@ -49,7 +44,12 @@ public class Main {
                 adj[a].add(new Node(b, w));
                 adj[b].add(new Node(a, w));
             }
-            System.out.println(miniBomb(1, 0, 0));
+            if (miniBomb(1, 0, Integer.MAX_VALUE) == Integer.MAX_VALUE) {
+                System.out.println(0);
+            }
+            else{
+                System.out.println(miniBomb(1, 0, Integer.MAX_VALUE));
+            }
         }
     }
     private static class Node{
