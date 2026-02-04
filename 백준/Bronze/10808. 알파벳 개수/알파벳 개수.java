@@ -5,16 +5,14 @@ import java.io.InputStreamReader;
 public class Main {
     public static void main(String[] args)throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int[] alCount = new int[26];
-        String input = br.readLine();
-        StringBuilder sb = new StringBuilder();
-
-        for(int alphaI=0;alphaI<input.length();alphaI++){
-            int tmp = input.charAt(alphaI) - 97;
-            alCount[tmp] += 1;
+        char[] charList = br.readLine().toCharArray();
+        int[] ans = new int[26];
+        for(int i=0;i<charList.length;i++){
+            ans[charList[i]-97] += 1;
         }
-        for(int alCountIdx=0;alCountIdx<26;alCountIdx++){
-            sb.append(alCount[alCountIdx]).append(" ");
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<26;i++){
+            sb.append(ans[i]).append(" ");
         }
         System.out.println(sb);
 
