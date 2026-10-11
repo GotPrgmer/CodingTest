@@ -20,21 +20,25 @@ class Solution {
         for(int i=0;i<intervals.length;i++){ //10^4
         int s = intervals[i][0];
         int e = intervals[i][1];
+        // 삽입이 끝난경우
         if(isInserted){
             ans.add(new int[]{s, e});
             continue;
         }
 
+        // 병합부분보다 왼쪽에 있는 경우
         if(e < mergeSt){
             ans.add(new int[]{s, e});
             idx++;
         }
+        // 병합부분이 끝난 경우
         else if(mergeEd < s){
             ans.add(new int[]{mergeSt, mergeEd});
             ans.add(new int[]{s, e});
 
             isInserted = true;
         }
+        // 겹치는 부분
         else {
                 isMerged = true;
                 mergeSt = Math.min(mergeSt, s);
