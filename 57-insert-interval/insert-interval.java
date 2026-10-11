@@ -5,21 +5,28 @@ class Solution {
         // 그리고 output함
         int mergeSt = newInterval[0];
         int mergeEd = newInterval[1];
+        int ns = mergeSt;
+        int ne = mergeEd;
         if(intervals.length == 0){
             return new int[][]{{mergeSt, mergeEd}};
         }
         Set<Integer> mergeIdx = new HashSet<>();
-        for(int i=0;i<intervals.length;i++){
-            for(int j=intervals[i][0];j<=intervals[i][1];j++){
-                if(newInterval[0] <= j && j<=newInterval[1]){
-                    // 겹침
-                    mergeIdx.add(i);
-                    mergeSt = Math.min(mergeSt, intervals[i][0]);
-                    mergeEd = Math.max(mergeEd, intervals[i][1]);
-                    break;
-                }
-            }
+        // 10^9
+        for(int i=0;i<intervals.length;i++){ //10^4
+        // 겹치는 경우는 완전 포갬, 왼쪽으로 걸침, 중간에 들어감, 오른쪽으로 걸침 4가지 경우
+        // 완전 포갬은 인터벌의 s, e가 있다면 ns <= s, e<= ne
+        // 왼쪽 걸침은 ns <= s, s <= ne < e
+        // 가운데 들어감은 s < ns < e, s < ne < e
+        // 오른쪽 걸침 s < ns < e, ne < e
+        int s = intervals[i][0];
+        int e = intervals[i][1];
+
+        if(!(ne < s || e < ns)){
+            mergeIdx.add(i);
+            mergeSt = Math.min(mergeSt, intervals[i][0]);
+            mergeEd = Math.max(mergeEd, intervals[i][1]);
         }
+    }
         int[][] ans = new int[intervals.length-mergeIdx.size()+1][2];
         int ansSize = 0;
         boolean flag = false;
@@ -42,8 +49,6 @@ class Solution {
             ans[ansSize][1] = mergeEd;
         }
         Arrays.sort(ans, (a, b) -> Integer.compare(a[0], b[0]));
-        System.out.println(mergeSt);
-        System.out.println(mergeEd);
         return ans;
     }
 }
